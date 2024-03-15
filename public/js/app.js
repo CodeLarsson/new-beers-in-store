@@ -21,9 +21,6 @@
     const beerListEL = document.querySelector('#beerListing');
     beerListEL.innerHTML = '';
 
-    const pagerEL = document.querySelector('#pager');
-    pagerEL.innerHTML = `${apiPage}`;
-
     const response = await fetch('/api/get-new-products-for-store', {
       method: 'POST',
       headers: {
@@ -39,8 +36,11 @@
       const apiResponse = await response.json();
 
       if (apiResponse.meta.nextPage !== apiPage) {
-        updatePager(apiPage, apiResponse.meta.nextPage, storeSelector.value);
-        apiPage = apiResponse.meta.nextPage;
+        updatePager(apiPage, apiResponse.meta.nextPage);
+        apiPage =
+          apiResponse.meta.nextPage === -1
+            ? apiPage
+            : apiResponse.meta.nextPage;
       }
 
       for (const product of apiResponse.products) {
@@ -59,18 +59,31 @@
     }
   };
 
-  const updatePager = (currentPage, nextPage, storeId) => {
+  const updatePager = (currentPage, nextPage) => {
+    console.log(currentPage, nextPage);
     const pagerEL = document.querySelector('#pager');
-    const nextPageEL = document.createElement('button');
-    nextPageEL.addEventListener('click', () => {
-      getNewProductsForStore(nextPage);
+    pagerEL.innerHTML = '';
+
+    const prevPageEL = document.createElement('button');
+    prevPageEL.textContent = nextPage === -1 ? currentPage - 1 : currentPage;
+    prevPageEL.addEventListener('click', () => {
+      getNewProductsForStore(nextPage === -1 ? currentPage - 1 : currentPage);
     });
-    pagerEL.appendChild(nextPageEL);
-    nextPageEL.innerHTML = `${nextPage}`;
+
+    const nextPageEL = document.createElement('button');
+    nextPageEL.textContent = nextPage === -1 ? currentPage : nextPage;
+    nextPageEL.addEventListener('click', () => {
+      getNewProductsForStore(nextPage === -1 ? currentPage : nextPage);
+    });
+
+    if (currentPage) {
+      pagerEL.appendChild(prevPageEL);
+    }
+    if (nextPage) {
+      pagerEL.appendChild(nextPageEL);
+    }
   };
 
   getStoreIds();
-  storeSelector.addEventListener('change', () =>
-    getNewProductsForStore(apiPage),
-  );
+  storeSelector.addEventListener('change', () => getNewProductsForStore(1));
 })();
