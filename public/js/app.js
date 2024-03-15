@@ -43,15 +43,17 @@
             : apiResponse.meta.nextPage;
       }
 
+      beerListEL.innerHTML =
+        '<div class="beer"><div class="beer-info">Product</div><div class="beer-info">Producer</div><div class="beer-info">Bottle</div><div class="beer-info">Volume</div><div class="beer-info">Price</div><div class="beer-info">Date</div > ';
       for (const product of apiResponse.products) {
         beerListEL.innerHTML += `
           <div class="beer">
-            <div>${product.productNameBold}</div>
-            <div>${product.producerName}</div>
-            <div>${product.bottleText}</div>
-            <div>${product.volumeText}</div>
-            <div>${product.price} kr</div>
-            <div>${product.productLaunchDate.split('T')[0]}</div>
+            <div class="beer-info">${product.productNameBold}</div>
+            <div class="beer-info">${product.producerName}</div>
+            <div class="beer-info">${product.bottleText}</div>
+            <div class="beer-info">${product.volumeText}</div>
+            <div class="beer-info">${product.price} kr</div>
+            <div class="beer-info">${product.productLaunchDate.split('T')[0]}</div>
 
           </div>
         `;
