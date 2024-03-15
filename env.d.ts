@@ -3,6 +3,7 @@ declare namespace NodeJS {
     BOLAGET_API_KEY: string;
     BOLAGET_API_BASE_URL: string;
     PORT: string;
+    WEBSITE_PORT: string;
     // Add other environment variables as needed
   }
 }
