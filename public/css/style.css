@@ -47,7 +47,6 @@ html {
 .beer {
   display: flex;
   gap: 1rem;
-  justify-content: center;
   align-items: baseline;
   padding: 0.5rem;
 }
